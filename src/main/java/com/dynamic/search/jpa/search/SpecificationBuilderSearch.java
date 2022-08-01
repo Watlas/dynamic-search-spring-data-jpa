@@ -32,48 +32,30 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
         for (SearchCriteria criteria : list) {
 
-            Expression<String> expression = new FilterRoot<J>(root, clazz).getExpression(criteria.getKey());
+            Expression<String> expression = new FilterRoot(root, clazz).getExpression(criteria.getKey());
 
             switch (criteria.getOperation()) {
-                case GREATER_THAN:
-                    predicates.add(criteriaBuilder.greaterThan(
-                            expression, criteria.getValue().toString()));
-                    break;
-                case LESS_THAN:
-                    predicates.add(criteriaBuilder.lessThan(
-                            expression, criteria.getValue().toString()));
-                    break;
-                case GREATER_THAN_EQUAL:
-                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                            expression, criteria.getValue().toString()));
-                    break;
-                case LESS_THAN_EQUAL:
-                    predicates.add(criteriaBuilder.lessThanOrEqualTo(
-                            expression, criteria.getValue().toString()));
-                    break;
-                case NOT_EQUAL:
-                    predicates.add(criteriaBuilder.notEqual(
-                            expression, criteria.getValue()));
-                    break;
-                case EQUAL:
-                    predicates.add(criteriaBuilder.equal(
-                            expression, criteria.getValue()));
-                    break;
-                case MATCH:
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(expression),
-                            "%" + criteria.getValue().toString().toLowerCase() + "%"));
-                    break;
-                case MATCH_END:
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(expression),
-                            criteria.getValue().toString().toLowerCase() + "%"));
-                    break;
-                case MATCH_START:
-                    predicates.add(criteriaBuilder.like(
-                            criteriaBuilder.lower(expression),
-                            "%" + criteria.getValue().toString().toLowerCase()));
-                    break;
+                case GREATER_THAN -> predicates.add(criteriaBuilder.greaterThan(
+                        expression, criteria.getValue().toString()));
+                case LESS_THAN -> predicates.add(criteriaBuilder.lessThan(
+                        expression, criteria.getValue().toString()));
+                case GREATER_THAN_EQUAL -> predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                        expression, criteria.getValue().toString()));
+                case LESS_THAN_EQUAL -> predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                        expression, criteria.getValue().toString()));
+                case NOT_EQUAL -> predicates.add(criteriaBuilder.notEqual(
+                        expression, criteria.getValue()));
+                case EQUAL -> predicates.add(criteriaBuilder.equal(
+                        expression, criteria.getValue()));
+                case MATCH -> predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(expression),
+                        "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                case MATCH_END -> predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(expression),
+                        criteria.getValue().toString().toLowerCase() + "%"));
+                case MATCH_START -> predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(expression),
+                        "%" + criteria.getValue().toString().toLowerCase()));
             }
         }
 

@@ -25,7 +25,7 @@ public class Address {
     private State state;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "pessoa_id", nullable = true)
+    @JoinColumn
     private People people;
 
     public Address(String name, State state, People people) {

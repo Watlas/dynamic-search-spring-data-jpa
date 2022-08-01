@@ -5,8 +5,6 @@ import com.dynamic.search.jpa.entity.Country;
 import com.dynamic.search.jpa.entity.People;
 import com.dynamic.search.jpa.entity.State;
 import com.dynamic.search.jpa.repository.AddressRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +25,7 @@ public class DynamicSearchJpaApplication {
 
     @Bean
     public void initDB() {
-        Address address = new Address("Rua 1", new State("SP", new Country("Brasil")), new People("João"));
+        Address address = new Address("Rua 1", new State("SP", new Country("Brazil")), new People("John"));
         addressRepository.save(address);
     }
 

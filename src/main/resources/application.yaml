@@ -3,7 +3,7 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:smart-clientes-api;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:dynamic-search-jpa;DB_CLOSE_ON_EXIT=FALSE
   h2:
     console:
       enabled: true

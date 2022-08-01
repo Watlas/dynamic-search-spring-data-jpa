@@ -1,6 +1,5 @@
 package com.dynamic.search.jpa.search;
 
-import lombok.AllArgsConstructor;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
@@ -14,11 +13,15 @@ import java.util.stream.Collectors;
 /**
  * class responsible for filtering the composition path if needed and validating if the attribute exists
  */
-@AllArgsConstructor
-class FilterRoot<J> {
+class FilterRoot {
 
-    private Path<J> root;
-    private Class<J> clazz;
+    private final Path<?> root;
+    private final Class<?> clazz;
+
+    public FilterRoot(Path<?> root, Class<?> clazz) {
+        this.root = root;
+        this.clazz = clazz;
+    }
 
     public Expression<String> getExpression(String path) {
         if (!path.contains(".")) {
@@ -56,7 +59,7 @@ class FilterRoot<J> {
         AtomicReference<Set<Field>> fieldsValue = new AtomicReference<>(Arrays.stream(clazz.getDeclaredFields()).collect(Collectors.toSet()));
 
         list.forEach(e -> fieldsValue.set(Arrays.stream(fieldsValue.get().stream().
-                filter(f -> f.getName().toLowerCase().equals(e.toLowerCase())).
+                filter(f -> f.getName().equalsIgnoreCase(e)).
                 findFirst().
                 orElseThrow(() -> new NoSuchFieldError("Invalid field path, field: " + e)).
                 getType().getDeclaredFields()).collect(Collectors.toSet())));

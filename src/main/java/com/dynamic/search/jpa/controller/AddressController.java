@@ -18,9 +18,8 @@ public class AddressController {
 
     private final AddressRepository addressRepository;
 
-
     @GetMapping()
-    public List<Address> listEndereco(@RequestParam String search) {
+    public List<Address> listAddressByFilter(@RequestParam String search) {
 
         return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search));
     }
