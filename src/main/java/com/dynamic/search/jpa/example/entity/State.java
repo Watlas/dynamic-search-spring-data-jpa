@@ -1,4 +1,4 @@
-package com.dynamic.search.jpa.entity;
+package com.dynamic.search.jpa.example.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,8 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class People {
+public class State {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +21,12 @@ public class People {
 
     private String name;
 
-    public People(String name) {
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @JoinColumn
+    private Country country;
+
+    public State(String name, Country country) {
         this.name = name;
+        this.country = country;
     }
 }

@@ -1,35 +1,37 @@
 package com.dynamic.search.jpa.search;
 
 
+import org.springframework.util.CollectionUtils;
+
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
-import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+
 /**
- * class responsible for filtering the composition path if needed and validating if the attribute exists
+ * class responsible for filtering the composition path
  */
-class FilterRoot {
+public class FilterRoot {
 
     private final Path<?> root;
-    private final Class<?> clazz;
 
-    public FilterRoot(Path<?> root, Class<?> clazz) {
+    public FilterRoot(Path<?> root) {
         this.root = root;
-        this.clazz = clazz;
     }
 
-    public Expression<String> getExpression(String path) {
+    /**
+     * returns the path and the last key of the path
+     * @param path path to be filtered
+     * @return {@link PathKey}
+     */
+    public PathKey getPathAndLastKey(String path) {
         if (!path.contains(".")) {
-            return root.get(path);
+            return new PathKey(root, path);
         }
         List<String> list = Arrays.stream(path.split("\\.")).collect(Collectors.toList());
-
-        existsFieldRoot(list);
 
         return filterListToPath(list);
     }
@@ -40,30 +42,13 @@ class FilterRoot {
      * @param list list of attributes
      * @return expression of the path
      */
-    private Expression<String> filterListToPath(List<String> list) {
+    private PathKey filterListToPath(List<String> list) {
         Path<Object> objectPath = root.get(list.get(0));
         for (int i = 1; i < list.size() - 1; i++) {
             objectPath = objectPath.get(list.get(i));
         }
-        assert objectPath != null;
-        return objectPath.get(list.get(list.size() - 1));
+        return new PathKey(objectPath, CollectionUtils.lastElement(list));
     }
 
-    /**
-     * valid if the field exists in the class or in composition
-     *
-     * @param list list of fields
-     */
-    public void existsFieldRoot(List<String> list) {
-
-        AtomicReference<Set<Field>> fieldsValue = new AtomicReference<>(Arrays.stream(clazz.getDeclaredFields()).collect(Collectors.toSet()));
-
-        list.forEach(e -> fieldsValue.set(Arrays.stream(fieldsValue.get().stream().
-                filter(f -> f.getName().equalsIgnoreCase(e)).
-                findFirst().
-                orElseThrow(() -> new NoSuchFieldError("Invalid field path, field: " + e)).
-                getType().getDeclaredFields()).collect(Collectors.toSet())));
-
-    }
 
 }

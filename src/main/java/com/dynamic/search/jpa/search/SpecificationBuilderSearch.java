@@ -17,14 +17,28 @@ import java.util.stream.Collectors;
  */
 public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
+    /**
+     * The list of search criteria
+     */
     private final Set<SearchCriteria> list;
-    private final Class<J> clazz;
 
+    /**
+     * The class of the entity to be searched
+     *
+     * @param clazz The type of the entity to be searched
+     * @param search The search criteria, example "name==John;age>=30;dateLastModified<=2020-01-01"
+     */
     public SpecificationBuilderSearch(Class<J> clazz, String search) {
-        this.clazz = clazz;
-        this.list = Arrays.stream(search.split(";")).map(SearchCriteria::new).collect(Collectors.toSet());
+        this.list = Arrays.stream(search.split(";")).map((String search1) -> new SearchCriteria(search1, clazz)).collect(Collectors.toSet());
     }
 
+    /**
+     * Creates the Specification object to be sent to the repository layer
+     * @param root  {@link Root}
+     * @param criteriaQuery {@link CriteriaQuery}
+     * @param criteriaBuilder  {@link CriteriaBuilder}
+     * @return {@link Specification}
+     */
     @Override
     public Predicate toPredicate(@NonNull Root<J> root, @NonNull CriteriaQuery<?> criteriaQuery, @NonNull CriteriaBuilder criteriaBuilder) {
 
@@ -32,33 +46,30 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
         for (SearchCriteria criteria : list) {
 
-            Expression<String> expression = new FilterRoot(root, clazz).getExpression(criteria.getKey());
+            final Comparable<?>[] convertedValues = getConvertedValue(criteria.getClazz(), criteria.getValue());
 
-            switch (criteria.getOperation()) {
-                case GREATER_THAN -> predicates.add(criteriaBuilder.greaterThan(
-                        expression, criteria.getValue().toString()));
-                case LESS_THAN -> predicates.add(criteriaBuilder.lessThan(
-                        expression, criteria.getValue().toString()));
-                case GREATER_THAN_EQUAL -> predicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                        expression, criteria.getValue().toString()));
-                case LESS_THAN_EQUAL -> predicates.add(criteriaBuilder.lessThanOrEqualTo(
-                        expression, criteria.getValue().toString()));
-                case NOT_EQUAL -> predicates.add(criteriaBuilder.notEqual(
-                        expression, criteria.getValue()));
-                case EQUAL -> predicates.add(criteriaBuilder.equal(
-                        expression, criteria.getValue()));
-                case MATCH -> predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(expression),
-                        "%" + criteria.getValue().toString().toLowerCase() + "%"));
-                case MATCH_END -> predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(expression),
-                        criteria.getValue().toString().toLowerCase() + "%"));
-                case MATCH_START -> predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(expression),
-                        "%" + criteria.getValue().toString().toLowerCase()));
-            }
+            PathKey pathKey = new FilterRoot(root).getPathAndLastKey(criteria.getKey());
+
+            Predicate apply = criteria.getOperation().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues);
+
+            predicates.add(apply);
+
         }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
+
+
+    /**
+     * Deserializes then given {@code value} array back to real object using {@code javaType}
+     *
+     * @param javaType real type of the object
+     * @param value    serialized value of the real object
+     * @return {@code Comparable<?>[]}
+     */
+    private Comparable<?>[] getConvertedValue(Class<?> javaType, Object value) {
+        return new Comparable[]{(Comparable) value};
+    }
+
+
 }

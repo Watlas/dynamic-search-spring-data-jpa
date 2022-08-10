@@ -3,24 +3,28 @@ package com.dynamic.search.jpa.search;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import static com.dynamic.search.jpa.search.SpecificationOperator.*;
+
 /**
  * Supported comparisons to do dynamic query
  */
 @RequiredArgsConstructor
 @Getter
-enum SearchOperation {
+public enum SearchOperation {
 
-    GREATER_THAN(">"),
-    LESS_THAN("<"),
-    GREATER_THAN_EQUAL(">="),
-    LESS_THAN_EQUAL("<="),
-    NOT_EQUAL("!="),
-    EQUAL("=="),
-    MATCH("&&"),
-    MATCH_START("~&"),
-    MATCH_END("&~");
+    GREATER_THAN(">", gt()),
+    LESS_THAN("<", lt()),
+    GREATER_THAN_EQUAL(">=", ge()),
+    LESS_THAN_EQUAL("<=", le()),
+    NOT_EQUAL("!=", notEq()),
+    EQUAL("==", eq()),
+    MATCH("&&", like()),
+    MATCH_START("~&", likeStart()),
+    MATCH_END("&~", likeEnd());
 
     private final String value;
+    private final SpecificationOperator operator;
+
 
     public static SearchOperation getByString(String value) {
 
@@ -43,7 +47,7 @@ enum SearchOperation {
         } else if (value.contains("&~")) {
             return MATCH_END;
         } else {
-            return null;
+            throw new IllegalArgumentException("Invalid search operation");
         }
     }
 }

@@ -1,6 +1,5 @@
-package com.dynamic.search.jpa.entity;
+package com.dynamic.search.jpa.example.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,10 +9,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
-public class State {
-
+public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,12 +18,7 @@ public class State {
 
     private String name;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    @JoinColumn
-    private Country country;
-
-    public State(String name, Country country) {
+    public Country(String name) {
         this.name = name;
-        this.country = country;
     }
 }

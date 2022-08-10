@@ -1,4 +1,4 @@
-package com.dynamic.search.jpa.exception;
+package com.dynamic.search.jpa.example.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
-
 
     @ExceptionHandler(NoSuchFieldError.class)
     public ResponseEntity<Object> handleNoSuchFieldError(NoSuchFieldError e) {

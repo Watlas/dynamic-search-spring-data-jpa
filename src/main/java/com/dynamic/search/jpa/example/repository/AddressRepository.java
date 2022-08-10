@@ -1,6 +1,6 @@
-package com.dynamic.search.jpa.repository;
+package com.dynamic.search.jpa.example.repository;
 
-import com.dynamic.search.jpa.entity.Address;
+import com.dynamic.search.jpa.example.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

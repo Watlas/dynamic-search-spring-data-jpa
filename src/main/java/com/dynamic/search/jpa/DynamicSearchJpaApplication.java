@@ -1,10 +1,10 @@
 package com.dynamic.search.jpa;
 
-import com.dynamic.search.jpa.entity.Address;
-import com.dynamic.search.jpa.entity.Country;
-import com.dynamic.search.jpa.entity.People;
-import com.dynamic.search.jpa.entity.State;
-import com.dynamic.search.jpa.repository.AddressRepository;
+import com.dynamic.search.jpa.example.entity.Address;
+import com.dynamic.search.jpa.example.entity.Country;
+import com.dynamic.search.jpa.example.entity.People;
+import com.dynamic.search.jpa.example.entity.State;
+import com.dynamic.search.jpa.example.repository.AddressRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
