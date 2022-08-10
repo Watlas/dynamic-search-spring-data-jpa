@@ -46,7 +46,7 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
         for (SearchCriteria criteria : list) {
 
-            final Comparable<?>[] convertedValues = getConvertedValue(criteria.getClazz(), criteria.getValue());
+            final Comparable<?>[] convertedValues = getConvertedValue(criteria.getValue());
 
             PathKey pathKey = new FilterRoot(root).getPathAndLastKey(criteria.getKey());
 
@@ -63,11 +63,10 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
     /**
      * Deserializes then given {@code value} array back to real object using {@code javaType}
      *
-     * @param javaType real type of the object
      * @param value    serialized value of the real object
      * @return {@code Comparable<?>[]}
      */
-    private Comparable<?>[] getConvertedValue(Class<?> javaType, Object value) {
+    private Comparable<?>[] getConvertedValue(Object value) {
         return new Comparable[]{(Comparable) value};
     }
 
