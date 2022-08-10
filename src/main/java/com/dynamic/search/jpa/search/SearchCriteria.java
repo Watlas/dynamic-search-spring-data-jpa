@@ -27,16 +27,11 @@ public final class SearchCriteria {
     private final SearchOperation operation;
 
 
-
-    private final Class<?> clazz ;
-
-
     public SearchCriteria(String search, Class<?> clazz) {
         operation = SearchOperation.getByString(search);
         List<String> collect = Arrays.stream(search.split(operation.getValue())).collect(Collectors.toList());
         this.key = collect.get(0);
         this.value = validAndReturnValue(Arrays.stream(collect.get(0).split("\\.")).collect(Collectors.toList()), clazz, collect.get(1));
-        this.clazz = this.value.getClass();
     }
 
 
