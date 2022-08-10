@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 
 import static com.dynamic.search.jpa.search.util.ValidField.validAndReturnValue;
 
+/**
+ * Class responsible for storing an instance of the query operator, the path of the attribute that will be searched and
+ * the object that will be compared with the values in the database
+ */
 @Getter
 public final class SearchCriteria {
 
