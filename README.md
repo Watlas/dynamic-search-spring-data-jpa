@@ -15,6 +15,7 @@ Project is created with: 2022-08-10
 * [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
 * [Java 11](https://openjdk.java.net/projects/jdk/11/)
 * [H2 database](https://www.h2database.com/)
+* [Lombok](https://projectlombok.org/)
 
 ## how to use:
 
