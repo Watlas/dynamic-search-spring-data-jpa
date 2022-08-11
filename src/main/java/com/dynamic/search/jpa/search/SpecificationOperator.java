@@ -14,10 +14,10 @@ interface SpecificationOperator {
      * @param path      Represents {@code javax.persistence.Criteria.Root}
      * @param cb        Represents {@code CriteriaBuilder}
      * @param attribute Represents name of the attribute that will be searched
-     * @param values    Represents operation's values
+     * @param value    Represents operation's value
      * @return {@link Predicate}
      */
-    Predicate apply(Path<?> path, CriteriaBuilder cb, String attribute, Comparable values);
+    Predicate apply(Path<?> path, CriteriaBuilder cb, String attribute, Comparable value);
 
 
     /**
@@ -26,8 +26,8 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator eq() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) ->
-                cb.equal(path.get(attribute), values);
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) ->
+                cb.equal(path.get(attribute), value);
     }
 
     /**
@@ -36,8 +36,8 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator notEq() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) ->
-                cb.notEqual(path.get(attribute), values);
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) ->
+                cb.notEqual(path.get(attribute), value);
     }
 
     /**
@@ -46,8 +46,8 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator gt() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) ->
-                cb.greaterThan(path.get(attribute), values);
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) ->
+                cb.greaterThan(path.get(attribute), value);
     }
 
     /**
@@ -56,8 +56,8 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator ge() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) ->
-                cb.greaterThanOrEqualTo(path.get(attribute), values);
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) ->
+                cb.greaterThanOrEqualTo(path.get(attribute), value);
     }
 
     /**
@@ -66,8 +66,8 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator lt() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) ->
-                cb.lessThan(path.get(attribute), values);
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) ->
+                cb.lessThan(path.get(attribute), value);
     }
 
     /**
@@ -76,8 +76,8 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator le() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) ->
-                cb.lessThanOrEqualTo(path.get(attribute), values);
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) ->
+                cb.lessThanOrEqualTo(path.get(attribute), value);
     }
 
     /**
@@ -86,7 +86,7 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator like() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) -> cb.like(cb.lower(path.get(attribute)), String.format("%%%s%%", values).toLowerCase());
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(cb.lower(path.get(attribute)), String.format("%%%s%%", value).toLowerCase());
     }
 
     /**
@@ -95,9 +95,9 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator likeStart() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) -> cb.like(
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(
                 cb.lower(path.get(attribute)),
-                "%" + values);
+                "%" + value);
     }
 
     /**
@@ -106,9 +106,9 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator likeEnd() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable values) -> cb.like(
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(
                 cb.lower(path.get(attribute)),
-                values + "%");
+                value + "%");
     }
 
 }
