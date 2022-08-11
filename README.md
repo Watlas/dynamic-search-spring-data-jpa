@@ -87,20 +87,18 @@ so just build the project and test.
 
 These are the operators supported by dynamic search.
 
-```
 | Operator Name        | Operator |
-| -------------------- | -------- |
-| `GREATER THAN`       |     >    |
-| `LESS THAN`          |     <    |
-| `GREATER THAN EQUAL` |     >=   |
-| `LESS THAN EQUAL`    |     <=   |
-| `NOT EQUAL`          |     !=   |
-| `EQUAL`              |     ==   |
-| `MATCH`              |     &&   |
-| `MATCH START`        |     ~&   |
-| `MATCH END`          |     &~   |
+| -------------------- |:--------:|
+| `GREATER THAN`       |    >     |
+| `LESS THAN`          |    <     |
+| `GREATER THAN EQUAL` |    >=    |
+| `LESS THAN EQUAL`    |    <=    |
+| `NOT EQUAL`          |    !=    |
+| `EQUAL`              |    ==    |
+| `MATCH`              |    &&    |
+| `MATCH START`        |    ~&    |
+| `MATCH END`          |    &~    |
   
-```
 
 
 ## How to use the solution in another Spring project:
