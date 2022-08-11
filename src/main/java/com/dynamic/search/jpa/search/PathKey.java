@@ -11,7 +11,7 @@ import javax.persistence.criteria.Path;
  */
 @Getter
 @RequiredArgsConstructor
-public final class PathKey {
+final class PathKey {
 
 
     private final Path<?> root;

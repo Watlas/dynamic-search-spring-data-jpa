@@ -65,7 +65,7 @@ formats accepted for now:
     http://localhost:8080/address/page?search=createdAt>=2022-06-06;createdAt<=2022-10-06&page=0&size=10
 ```
 
-But you can go there yourself in the DateUtil Class and add its format.
+But you can go there yourself in the DateCreate Class and add its format.
 
 
 

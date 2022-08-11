@@ -1,4 +1,4 @@
-package com.dynamic.search.jpa.search.util;
+package com.dynamic.search.jpa.search;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ValidField {
+final class ValidField {
 
     /**
      * valid field and return value
@@ -54,9 +54,9 @@ public final class ValidField {
 
     private static Object convertTypeDate(Field field, String value) {
 
-        if (field.getType().isAssignableFrom(LocalDate.class)) return DateUtil.createLocalDate(value);
+        if (field.getType().isAssignableFrom(LocalDate.class)) return DateCreate.createLocalDate(value);
 
-        if (field.getType().isAssignableFrom(LocalDateTime.class)) return DateUtil.createLocalDateTime(value);
+        if (field.getType().isAssignableFrom(LocalDateTime.class)) return DateCreate.createLocalDateTime(value);
 
         return ObjectMapper_.INSTANCE.convert(value, field.getDeclaringClass());
 

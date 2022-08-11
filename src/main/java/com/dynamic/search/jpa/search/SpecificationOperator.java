@@ -8,7 +8,7 @@ import javax.persistence.criteria.Predicate;
  * A functional interface represents Query Operators that will be used to build a Specification.
  */
 @FunctionalInterface
-public interface SpecificationOperator {
+interface SpecificationOperator {
 
     /**
      * Represents equality function

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * class responsible for filtering the composition path
  */
-public class FilterRoot {
+class FilterRoot {
 
     private final Path<?> root;
 

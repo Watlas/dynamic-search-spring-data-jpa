@@ -1,4 +1,4 @@
-package com.dynamic.search.jpa.search.util;
+package com.dynamic.search.jpa.search;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import static java.time.temporal.ChronoField.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class DateUtil {
+final class DateCreate {
 
 
     /**

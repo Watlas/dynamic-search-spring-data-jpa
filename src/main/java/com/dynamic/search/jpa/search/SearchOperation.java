@@ -10,7 +10,7 @@ import static com.dynamic.search.jpa.search.SpecificationOperator.*;
  */
 @RequiredArgsConstructor
 @Getter
-public enum SearchOperation {
+enum SearchOperation {
 
     GREATER_THAN(">", gt()),
     LESS_THAN("<", lt()),
