@@ -67,6 +67,8 @@ formats accepted for now:
 
 But you can go there yourself in the DateUtil Class and add its format.
 
+
+
 ```
 getDynamicFormatLocalDateTime() 
 ```
@@ -81,6 +83,23 @@ so just build the project and test.
         Address address = new Address("Rua 1", new State("SP", new Country("Brazil")), new People("John"));
         addressRepository.save(address);
     }
+```
+
+These are the operators supported by dynamic search.
+
+```
+| Operator Name        | Operator |
+| -------------------- | -------- |
+| `GREATER THAN`       |     >    |
+| `LESS THAN`          |     <    |
+| `GREATER THAN EQUAL` |     >=   |
+| `LESS THAN EQUAL`    |     <=   |
+| `NOT EQUAL`          |     !=   |
+| `EQUAL`              |     ==   |
+| `MATCH`              |     &&   |
+| `MATCH START`        |     ~&   |
+| `MATCH END`          |     &~   |
+  
 ```
 
 

@@ -30,5 +30,4 @@ public class AddressController {
         return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search), pageable);
     }
 
-
 }

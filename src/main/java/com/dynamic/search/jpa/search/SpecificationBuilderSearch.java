@@ -29,7 +29,7 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
      * The class of the entity to be searched
      *
      * @param clazz  The type of the entity to be searched
-     * @param search The search criteria, example <p>"name==John;age>=30;dateLastModified<=2020-01-01" </p>
+     * @param search The search criteria, example <p>name==John;age>=30;dateLastModified<=2020-01-01</p>
      */
     public SpecificationBuilderSearch(Class<J> clazz, String search) {
         this.list = Arrays.stream(search.split(";")).map((String search1) -> new SearchCriteria(search1, clazz)).collect(Collectors.toSet());
