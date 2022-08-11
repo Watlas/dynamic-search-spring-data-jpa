@@ -114,3 +114,5 @@ search - Search parameter
 SpecificationBuilderSearch - Class responsible for creating the Specification to send the repository layer
 
 ```
+## Author:
+*  [Watlas](https://github.com/Watlas)
