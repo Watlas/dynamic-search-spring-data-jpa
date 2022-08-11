@@ -21,12 +21,12 @@ public class AddressController {
     private final AddressRepository addressRepository;
 
     @GetMapping(produces = "application/json")
-    public List<Address> listAddressByFilter(@RequestParam String search) {
+    public List<Address> listAddressByFilter(String search) {
         return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search));
     }
 
     @GetMapping(produces = "application/json", path = "/page")
-    public Page<Address> listAddressByFilterAndPageable(@RequestParam String search, Pageable pageable) {
+    public Page<Address> listAddressByFilterAndPageable(String search, Pageable pageable) {
         return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search), pageable);
     }
 
