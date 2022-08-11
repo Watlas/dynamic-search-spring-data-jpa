@@ -1,22 +1,14 @@
-
 package com.dynamic.search.jpa.search;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 
 /**
  * A functional interface represents Query Operators that will be used to build a Specification.
  */
 @FunctionalInterface
 public interface SpecificationOperator {
-
-    /**
-     * @param from      Represents {@code javax.persistence.Criteria.Root} or {@code javax.persistence.Criteria.Join}
-     * @param cb        Represents {@code CriteriaBuilder}
-     * @param attribute Represents entity as a {@code String}
-     * @param values    Represents operation's values
-     * @return {@code Predicate}
-     */
-    Predicate apply(Path<?> from, CriteriaBuilder cb, String attribute, Comparable[] values);
 
     /**
      * Represents equality function
@@ -108,6 +100,15 @@ public interface SpecificationOperator {
                 cb.lower(from.get(attribute)),
                 values[0] + "%");
     }
+
+    /**
+     * @param from      Represents {@code javax.persistence.Criteria.Root} or {@code javax.persistence.Criteria.Join}
+     * @param cb        Represents {@code CriteriaBuilder}
+     * @param attribute Represents entity as a {@code String}
+     * @param values    Represents operation's values
+     * @return {@code Predicate}
+     */
+    Predicate apply(Path<?> from, CriteriaBuilder cb, String attribute, Comparable[] values);
 
 
 }

@@ -3,7 +3,10 @@ package com.dynamic.search.jpa.search;
 import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +28,7 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
     /**
      * The class of the entity to be searched
      *
-     * @param clazz The type of the entity to be searched
+     * @param clazz  The type of the entity to be searched
      * @param search The search criteria, example <p>"name==John;age>=30;dateLastModified<=2020-01-01" </p>
      */
     public SpecificationBuilderSearch(Class<J> clazz, String search) {
@@ -34,9 +37,10 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
     /**
      * Creates the Specification object to be sent to the repository layer
-     * @param root  {@link Root}
-     * @param criteriaQuery {@link CriteriaQuery}
-     * @param criteriaBuilder  {@link CriteriaBuilder}
+     *
+     * @param root            {@link Root}
+     * @param criteriaQuery   {@link CriteriaQuery}
+     * @param criteriaBuilder {@link CriteriaBuilder}
      * @return {@link Specification}
      */
     @Override
@@ -63,7 +67,7 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
     /**
      * Deserializes then given {@code value} array back to real object using {@code javaType}
      *
-     * @param value    serialized value of the real object
+     * @param value serialized value of the real object
      * @return {@code Comparable<?>[]}
      */
     private Comparable<?>[] getConvertedValue(Object value) {

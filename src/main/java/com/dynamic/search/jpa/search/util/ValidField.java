@@ -58,7 +58,7 @@ public final class ValidField {
 
         if (field.getType().isAssignableFrom(LocalDateTime.class)) return DateUtil.createLocalDateTime(value);
 
-        return ObjectMapper_.INSTANCE.convert(value, field.getType());
+        return ObjectMapper_.INSTANCE.convert(value, field.getDeclaringClass());
 
     }
 

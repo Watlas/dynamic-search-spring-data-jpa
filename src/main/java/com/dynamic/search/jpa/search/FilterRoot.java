@@ -3,10 +3,8 @@ package com.dynamic.search.jpa.search;
 
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +22,7 @@ public class FilterRoot {
 
     /**
      * returns the path and the last key of the path
+     *
      * @param path path to be filtered
      * @return {@link PathKey}
      */
