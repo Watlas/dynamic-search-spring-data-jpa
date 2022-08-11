@@ -54,7 +54,7 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
             PathKey pathKey = new FilterRoot(root).getPathAndLastKey(criteria.getKey());
 
-            Predicate apply = criteria.getOperation().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues);
+            Predicate apply = criteria.getOperation().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues[0]);
 
             predicates.add(apply);
 
