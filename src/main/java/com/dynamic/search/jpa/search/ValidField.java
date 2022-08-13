@@ -2,16 +2,23 @@ package com.dynamic.search.jpa.search;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+
+import static java.time.temporal.ChronoField.*;
+import static java.time.temporal.ChronoField.MILLI_OF_SECOND;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ValidField {
@@ -28,7 +35,7 @@ final class ValidField {
 
         Field field = existsFieldRoot(list, clazz);
 
-        return convertTypeDate(field, value);
+        return convertType(field, value);
     }
 
     /**
@@ -51,24 +58,33 @@ final class ValidField {
         return fieldsValue.get().get(list.size() - 1);
     }
 
-
-    private static Object convertTypeDate(Field field, String value) {
-
-        if (field.getType().isAssignableFrom(LocalDate.class)) return DateCreate.createLocalDate(value);
-
-        if (field.getType().isAssignableFrom(LocalDateTime.class)) return DateCreate.createLocalDateTime(value);
-
+    /**
+     * convert type of the field
+     * @param field field to convert
+     * @param value value to convert
+     * @return converted value
+     */
+    private static Object convertType(Field field, String value) {
         return ObjectMapper_.INSTANCE.convert(value, field.getDeclaringClass());
 
     }
 
+    /**
+     * Object mapper to convert types
+     */
     private enum ObjectMapper_ {
         INSTANCE;
         private final ObjectMapper objectMapper;
 
         ObjectMapper_() {
+            LocalDateTimeDeserializer dateTimeDeserializer = new LocalDateTimeDeserializer(getDynamicFormatLocalDateTime());
+            LocalDateDeserializer dateDeserializer = new LocalDateDeserializer(getDynamicFormatLocalDateTime());
+            JavaTimeModule javaTimeModule = new JavaTimeModule();
+            javaTimeModule.addDeserializer(LocalDateTime.class, dateTimeDeserializer);
+            javaTimeModule.addDeserializer(LocalDate.class, dateDeserializer);
+
             objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.registerModule(javaTimeModule);
         }
 
         /**
@@ -78,5 +94,50 @@ final class ValidField {
         public Object convert(Object fromValue, Class<?> toJavaType) {
             return objectMapper.convertValue(fromValue, toJavaType);
         }
+    }
+
+
+    /**
+     * Date patterns accepted when creating Query and Criteria
+     * yyyy/MM/dd HH:mm:ss.SSSSSS
+     * yyyy-MM-dd HH:mm:ss
+     * ddMMMyyyy:HH:mm:ss.SSS
+     * yyyy-MM-dd HH:mm
+     * yyyy-MM-dd
+     * yyyy/MM/dd HH:mm
+     * yyyy/MM/dd
+     *
+     * @return A DateTimeFormatter in the accepted standard
+     */
+    private static DateTimeFormatter getDynamicFormatLocalDateTime() {
+        return new DateTimeFormatterBuilder()
+                .appendOptional(DateTimeFormatter.ofPattern("[yyyy/MM/dd HH:mm:ss.SSSSSS]"))
+                .appendOptional(DateTimeFormatter.ofPattern("[yyyy-MM-dd HH:mm:ss[.SSS]]"))
+                .appendOptional(DateTimeFormatter.ofPattern("[ddMMMyyyy:HH:mm:ss.SSS[ Z]]"))
+                .appendOptional(new DateTimeFormatterBuilder()
+                        .appendPattern("[yyyy-MM-dd [HH:mm]]")
+                        .parseDefaulting(HOUR_OF_DAY, 0)
+                        .parseDefaulting(MINUTE_OF_HOUR, 0)
+                        .parseDefaulting(SECOND_OF_MINUTE, 0)
+                        .parseDefaulting(MILLI_OF_SECOND, 0)
+                        .toFormatter())
+                .appendOptional(new DateTimeFormatterBuilder()
+                        .appendPattern("[yyyy-MM-dd]")
+                        .parseDefaulting(SECOND_OF_MINUTE, 0)
+                        .parseDefaulting(MILLI_OF_SECOND, 0)
+                        .toFormatter())
+                .appendOptional(new DateTimeFormatterBuilder()
+                        .appendPattern("[yyyy/MM/dd [HH:mm]]")
+                        .parseDefaulting(HOUR_OF_DAY, 0)
+                        .parseDefaulting(MINUTE_OF_HOUR, 0)
+                        .parseDefaulting(SECOND_OF_MINUTE, 0)
+                        .parseDefaulting(MILLI_OF_SECOND, 0)
+                        .toFormatter())
+                .appendOptional(new DateTimeFormatterBuilder()
+                        .appendPattern("[yyyy/MM/dd]")
+                        .parseDefaulting(SECOND_OF_MINUTE, 0)
+                        .parseDefaulting(MILLI_OF_SECOND, 0)
+                        .toFormatter())
+                .toFormatter();
     }
 }
