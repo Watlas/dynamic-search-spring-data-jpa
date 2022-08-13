@@ -19,6 +19,17 @@ Project is created with: 2022-08-10
 
 ## how to use:
 
+Project is using H2 database (memory database), and it already has initial load when starting the application,
+so just build the project and test.
+
+```
+    @Bean
+    public void initDB() {
+        Address address = new Address("Rua 1", new State("SP", new Country("Brazil")), new People("John"));
+        addressRepository.save(address);
+    }
+```
+
 As an example we will use an endpoint that is in the directory com.dynamic.search.jpa.example.controller:
 
 ```
@@ -67,22 +78,8 @@ formats accepted for now:
 
 But you can go there yourself in the DateCreate Class and add its format.
 
-
-
 ```
 getDynamicFormatLocalDateTime() 
-```
-## How to use:
-
-Project is using H2 database (memory database), and it already has initial load when starting the application,
-so just build the project and test.
-
-```
-    @Bean
-    public void initDB() {
-        Address address = new Address("Rua 1", new State("SP", new Country("Brazil")), new People("John"));
-        addressRepository.save(address);
-    }
 ```
 
 These are the operators supported by dynamic search.
@@ -98,7 +95,6 @@ These are the operators supported by dynamic search.
 | `MATCH`              |    &&    |
 | `MATCH START`        |    ~&    |
 | `MATCH END`          |    &~    |
-  
 
 
 ## How to use the solution in another Spring project:

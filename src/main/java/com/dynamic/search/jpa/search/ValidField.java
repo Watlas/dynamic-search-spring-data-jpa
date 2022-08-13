@@ -128,8 +128,7 @@ final class ValidField {
             javaTimeModule.addDeserializer(LocalDateTime.class, dateTimeDeserializer);
             javaTimeModule.addDeserializer(LocalDate.class, dateDeserializer);
 
-            objectMapper = new ObjectMapper();
-            objectMapper.registerModule(javaTimeModule);
+            objectMapper = new ObjectMapper().registerModule(javaTimeModule);
         }
 
         /**
