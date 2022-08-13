@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoField.*;
-import static java.time.temporal.ChronoField.MILLI_OF_SECOND;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ValidField {
@@ -60,6 +59,7 @@ final class ValidField {
 
     /**
      * convert type of the field
+     *
      * @param field field to convert
      * @param value value to convert
      * @return converted value
@@ -68,34 +68,6 @@ final class ValidField {
         return ObjectMapper_.INSTANCE.convert(value, field.getDeclaringClass());
 
     }
-
-    /**
-     * Object mapper to convert types
-     */
-    private enum ObjectMapper_ {
-        INSTANCE;
-        private final ObjectMapper objectMapper;
-
-        ObjectMapper_() {
-            LocalDateTimeDeserializer dateTimeDeserializer = new LocalDateTimeDeserializer(getDynamicFormatLocalDateTime());
-            LocalDateDeserializer dateDeserializer = new LocalDateDeserializer(getDynamicFormatLocalDateTime());
-            JavaTimeModule javaTimeModule = new JavaTimeModule();
-            javaTimeModule.addDeserializer(LocalDateTime.class, dateTimeDeserializer);
-            javaTimeModule.addDeserializer(LocalDate.class, dateDeserializer);
-
-            objectMapper = new ObjectMapper();
-            objectMapper.registerModule(javaTimeModule);
-        }
-
-        /**
-         * @param fromValue  json object to be deserialized to the real object type
-         * @param toJavaType the real type to be converted
-         */
-        public Object convert(Object fromValue, Class<?> toJavaType) {
-            return objectMapper.convertValue(fromValue, toJavaType);
-        }
-    }
-
 
     /**
      * Date patterns accepted when creating Query and Criteria
@@ -139,5 +111,33 @@ final class ValidField {
                         .parseDefaulting(MILLI_OF_SECOND, 0)
                         .toFormatter())
                 .toFormatter();
+    }
+
+
+    /**
+     * Object mapper to convert types
+     */
+    private enum ObjectMapper_ {
+        INSTANCE;
+        private final ObjectMapper objectMapper;
+
+        ObjectMapper_() {
+            LocalDateTimeDeserializer dateTimeDeserializer = new LocalDateTimeDeserializer(getDynamicFormatLocalDateTime());
+            LocalDateDeserializer dateDeserializer = new LocalDateDeserializer(getDynamicFormatLocalDateTime());
+            JavaTimeModule javaTimeModule = new JavaTimeModule();
+            javaTimeModule.addDeserializer(LocalDateTime.class, dateTimeDeserializer);
+            javaTimeModule.addDeserializer(LocalDate.class, dateDeserializer);
+
+            objectMapper = new ObjectMapper();
+            objectMapper.registerModule(javaTimeModule);
+        }
+
+        /**
+         * @param fromValue  json object to be deserialized to the real object type
+         * @param toJavaType the real type to be converted
+         */
+        public Object convert(Object fromValue, Class<?> toJavaType) {
+            return objectMapper.convertValue(fromValue, toJavaType);
+        }
     }
 }

@@ -11,16 +11,6 @@ import javax.persistence.criteria.Predicate;
 interface SpecificationOperator {
 
     /**
-     * @param path      Represents {@code javax.persistence.Criteria.Root}
-     * @param cb        Represents {@code CriteriaBuilder}
-     * @param attribute Represents name of the attribute that will be searched
-     * @param value    Represents operation's value
-     * @return {@link Predicate}
-     */
-    Predicate apply(Path<?> path, CriteriaBuilder cb, String attribute, Comparable value);
-
-
-    /**
      * Represents equality function
      *
      * @return {@link SpecificationOperator}
@@ -110,5 +100,14 @@ interface SpecificationOperator {
                 cb.lower(path.get(attribute)),
                 value + "%");
     }
+
+    /**
+     * @param path      Represents {@code javax.persistence.Criteria.Root}
+     * @param cb        Represents {@code CriteriaBuilder}
+     * @param attribute Represents name of the attribute that will be searched
+     * @param value     Represents operation's value
+     * @return {@link Predicate}
+     */
+    Predicate apply(Path<?> path, CriteriaBuilder cb, String attribute, Comparable value);
 
 }
