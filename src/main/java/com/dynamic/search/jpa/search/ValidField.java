@@ -65,7 +65,7 @@ final class ValidField {
      * @return converted value
      */
     private static Object convertType(Field field, String value) {
-        return ObjectMapper_.INSTANCE.convert(value, field.getDeclaringClass());
+        return ObjectMapper_.INSTANCE.convert(value, field.getType());
 
     }
 
