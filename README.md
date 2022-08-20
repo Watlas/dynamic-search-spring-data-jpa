@@ -97,6 +97,12 @@ These are the operators supported by dynamic search.
 | `MATCH END`          |    &~    |
 
 
+You can see examples of all operations supported in the integration tests found in the SearchTest class.
+
+```
+mvn clean test
+```
+
 ## How to use the solution in another Spring project:
 
 just add the directory com.dynamic.search.jpa.search in your project and call the class SpecificationBuilderSearch

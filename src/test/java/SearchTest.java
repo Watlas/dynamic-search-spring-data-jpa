@@ -33,9 +33,9 @@ class SearchTest {
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
 
-        log.info("equals test response: {}", response);
-
         Assertions.assertNotNull(response);
+
+        log.info("equals test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -45,10 +45,9 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt>2022-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-
-        log.info("great than test response: {}", response);
-
         Assertions.assertNotNull(response);
+
+        log.info("great than test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -58,10 +57,9 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt<2025-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-
-        log.info("less than test response: {}", response);
-
         Assertions.assertNotNull(response);
+
+        log.info("less than test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -71,10 +69,9 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt>=2022-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-
-        log.info("greater than equal test response: {}", response);
-
         Assertions.assertNotNull(response);
+
+        log.info("greater than equal test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -84,10 +81,10 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt<=2025-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-
-        log.info("less than equal test response: {}", response);
-
+        
         Assertions.assertNotNull(response);
+
+        log.info("less than equal test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -97,10 +94,10 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange("/address?search=name!=Rua 2", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-
-        log.info("not equals test response: {}", response);
-
+        
         Assertions.assertNotNull(response);
+
+        log.info("not equals test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -117,9 +114,9 @@ class SearchTest {
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
 
-        log.info("match test response: {}", response);
-
         Assertions.assertNotNull(response);
+
+        log.info("match test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -134,10 +131,9 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange(uri, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-
-        log.info("match test response: {}", response);
-
         Assertions.assertNotNull(response);
+
+        log.info("match test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
@@ -152,10 +148,10 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange(uri, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-
-        log.info("match test response: {}", response);
-
+        
         Assertions.assertNotNull(response);
+
+        log.info("match test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }

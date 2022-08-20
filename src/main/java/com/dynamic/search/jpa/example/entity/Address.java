@@ -38,4 +38,15 @@ public class Address {
         this.state = state;
         this.people = people;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", createdAt=" + createdAt +
+                ", state=" + state +
+                ", people=" + people +
+                '}';
+    }
 }
