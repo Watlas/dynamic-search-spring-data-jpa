@@ -82,7 +82,7 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt<=2025-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-        
+
         Assertions.assertNotNull(response);
 
         log.info("less than equal test response: {}", response.get(0).toString());
@@ -95,7 +95,7 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange("/address?search=name!=Rua 2", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-        
+
         Assertions.assertNotNull(response);
 
         log.info("not equals test response: {}", response.get(0).toString());
@@ -132,6 +132,7 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange(uri, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
+
         Assertions.assertNotNull(response);
 
         log.info("match test response: {}", response.get(0).toString());
@@ -150,7 +151,7 @@ class SearchTest {
         List<Address> response = testRestTemplate.exchange(uri, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
-        
+
         Assertions.assertNotNull(response);
 
         log.info("match test response: {}", response.get(0).toString());
