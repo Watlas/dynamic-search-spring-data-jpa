@@ -117,4 +117,4 @@ SpecificationBuilderSearch - Class responsible for creating the Specification to
 
 ```
 ## Author:
-*  [Watlas](https://github.com/Watlas)
+*  [Watlas](https://www.linkedin.com/in/watlas-rick-371392181/)
