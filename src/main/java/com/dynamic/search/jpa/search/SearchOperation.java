@@ -47,7 +47,7 @@ enum SearchOperation {
         } else if (value.contains("&~")) {
             return MATCH_END;
         } else {
-            throw new IllegalArgumentException("Invalid search operation");
+            throw new IllegalArgumentException("Invalid search operation: "+ value);
         }
     }
 }

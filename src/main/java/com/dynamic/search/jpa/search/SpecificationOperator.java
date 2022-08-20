@@ -87,7 +87,8 @@ interface SpecificationOperator {
     static SpecificationOperator likeStart() {
         return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(
                 cb.lower(path.get(attribute)),
-                "%" + value);
+                value.toString().toLowerCase() + "%");
+
     }
 
     /**
@@ -98,7 +99,7 @@ interface SpecificationOperator {
     static SpecificationOperator likeEnd() {
         return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(
                 cb.lower(path.get(attribute)),
-                value + "%");
+                "%" + value.toString().toLowerCase());
     }
 
     /**
