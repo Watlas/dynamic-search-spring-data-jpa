@@ -1,6 +1,9 @@
 package com.dynamic.search.jpa.search;
 
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.Path;
@@ -12,41 +15,43 @@ import java.util.stream.Collectors;
 /**
  * class responsible for filtering the composition path
  */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 class FilterRoot {
 
     private final Path<?> root;
 
-    public FilterRoot(Path<?> root) {
-        this.root = root;
-    }
+    private final String lastKey;
 
     /**
      * returns the path and the last key of the path
      *
      * @param path path to be filtered
-     * @return {@link PathKey}
+     * @param root root of the path
+     * @return {@link FilterRoot}
      */
-    public PathKey getPathAndLastKey(String path) {
+    public static FilterRoot getPathAndLastKey(String path, Path<?> root) {
         if (!path.contains(".")) {
-            return new PathKey(root, path);
+            return new FilterRoot(root, path);
         }
         List<String> list = Arrays.stream(path.split("\\.")).collect(Collectors.toList());
 
-        return filterListToPath(list);
+        return filterListToPath(list, root);
     }
 
     /**
      * filter the list to the path
      *
      * @param list list of attributes
-     * @return expression of the path
+     * @param root root of the path
+     * @return expression of the path {@link FilterRoot}
      */
-    private PathKey filterListToPath(List<String> list) {
+    private static FilterRoot filterListToPath(List<String> list, Path<?> root) {
         Path<Object> objectPath = root.get(list.get(0));
         for (int i = 1; i < list.size() - 1; i++) {
             objectPath = objectPath.get(list.get(i));
         }
-        return new PathKey(objectPath, CollectionUtils.lastElement(list));
+        return new FilterRoot(objectPath, CollectionUtils.lastElement(list));
     }
 
 

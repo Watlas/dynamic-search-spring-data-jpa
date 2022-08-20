@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.dynamic.search.jpa.search.FilterRoot.getPathAndLastKey;
+
 /**
  * Class responsible for creating the Specification object to be sent to the repository layer
  *
@@ -52,7 +54,7 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
             final Comparable<?>[] convertedValues = getConvertedValue(criteria.getValue());
 
-            PathKey pathKey = new FilterRoot(root).getPathAndLastKey(criteria.getKey());
+            FilterRoot pathKey = getPathAndLastKey(criteria.getKey(), root);
 
             Predicate apply = criteria.getOperation().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues[0]);
 
