@@ -1,9 +1,7 @@
 import com.dynamic.search.jpa.DynamicSearchJpaApplication;
 import com.dynamic.search.jpa.example.entity.Address;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -22,14 +20,16 @@ import java.util.List;
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Slf4j
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SearchTest {
 
     @Autowired
     @Qualifier("testRestTemplate")
     private TestRestTemplate testRestTemplate;
 
-    @Test
+    @Order(1)
     @DisplayName("Test Equals, using only one field and one operation")
+    @Test
     void testEquals() {
         List<Address> response = testRestTemplate.exchange("/address?search=name==Rua 1", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -42,6 +42,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(2)
     @Test
     @DisplayName("Test greater than, using only one field and one operation")
     void testGreatThan() {
@@ -55,6 +56,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(3)
     @Test
     @DisplayName("Test Less Than than equal, using only one field and one operation")
     void testLessThan() {
@@ -68,6 +70,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(4)
     @Test
     @DisplayName("Test Greater Than Equal, using only one field and one operation")
     void testGreaterThanEqual() {
@@ -81,6 +84,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(5)
     @Test
     @DisplayName("Test Less Than Equal, using only one field and one operation")
     void testLessThanEqual() {
@@ -95,6 +99,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(6)
     @Test
     @DisplayName("Test Not Equal, using only one field and one operation")
     void testNotEquals() {
@@ -109,6 +114,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(7)
     @Test
     @DisplayName("Test Match, using only one field and one operation")
     void testMatch() {
@@ -129,6 +135,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(8)
     @Test
     @DisplayName("Test Match Start, using only one field and one operation")
     void testMatchStart() {
@@ -148,6 +155,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(9)
     @Test
     @DisplayName("Test Match End, using only one field and one operation")
     void testMatchEnd() {
@@ -167,6 +175,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(10)
     @Test
     @DisplayName("Test Equals, using only one field and one operation but using Composition")
     void testEqualsAccessingComposition() {
@@ -181,6 +190,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(11)
     @Test
     @DisplayName("Test Not Equals, using only one field and one operation but using Composition")
     void testNotEqualsAccessingComposition() {
@@ -195,6 +205,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(12)
     @Test
     @DisplayName("Test using only multiples fields and one multiples operations and Composition 1")
     void testEqualsAccessingCompositionAndMultipleFields() {
@@ -209,6 +220,7 @@ class SearchTest {
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }
 
+    @Order(13)
     @Test
     @DisplayName("Test using only multiples fields and one multiples operations and Composition 2")
     void testMultipleOperationsAndMultipleFields() {
