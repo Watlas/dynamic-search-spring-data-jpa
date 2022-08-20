@@ -6,20 +6,23 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoField.*;
+import static java.util.Arrays.stream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 final class ValidField {
 
     /**
@@ -32,7 +35,7 @@ final class ValidField {
      */
     public static Object validAndReturnValue(List<String> list, Class<?> clazz, String value) {
 
-        Field field = existsFieldRoot(list, clazz);
+        Class<?> field = existsFieldRoot(list, clazz);
 
         return convertType(field, value);
     }
@@ -43,18 +46,26 @@ final class ValidField {
      * @param list list of fields
      * @return field exists
      */
-    private static Field existsFieldRoot(List<String> list, Class<?> clazz) {
+    private static Class<?> existsFieldRoot(List<String> list, Class<?> clazz) {
 
-        final AtomicReference<List<Field>> fieldsValue = new AtomicReference<>(Arrays.stream(clazz.getDeclaredFields()).collect(Collectors.toList()));
+        final AtomicReference<List<Field>> fieldsValue = new AtomicReference<>(stream(clazz.getDeclaredFields()).collect(Collectors.toList()));
 
-        list.forEach(e -> fieldsValue.set(Arrays.stream(fieldsValue.get().stream().
-                filter(f -> f.getName().equalsIgnoreCase(e)).
-                findFirst().
-                orElseThrow(() -> new NoSuchFieldError("Invalid field path, field: " + e)).
-                getType().getDeclaredFields()).collect(Collectors.toList())));
+        Field fieldReturn = fieldsValue.get().get(0);
+
+        for (String e : list) {
+
+            Field field = fieldsValue.get().stream().
+                    filter(f -> f.getName().equalsIgnoreCase(e)).
+                    findFirst().
+                    orElseThrow(() -> new NoSuchFieldError("Invalid field path, field: " + e));
+
+            fieldsValue.set(stream(field.getDeclaringClass().getDeclaredFields()).collect(Collectors.toList()));
+
+            fieldReturn = field;
+        }
 
 
-        return fieldsValue.get().get(list.size() - 1);
+        return fieldReturn.getType();
     }
 
     /**
@@ -64,8 +75,8 @@ final class ValidField {
      * @param value value to convert
      * @return converted value
      */
-    private static Object convertType(Field field, String value) {
-        return ObjectMapper_.INSTANCE.convert(value, field.getType());
+    private static Object convertType(Class<?> field, String value) {
+        return ObjectMapper_.INSTANCE.convert(value, field);
 
     }
 
@@ -122,12 +133,9 @@ final class ValidField {
         private final ObjectMapper objectMapper;
 
         ObjectMapper_() {
-            LocalDateTimeDeserializer dateTimeDeserializer = new LocalDateTimeDeserializer(getDynamicFormatLocalDateTime());
-            LocalDateDeserializer dateDeserializer = new LocalDateDeserializer(getDynamicFormatLocalDateTime());
             JavaTimeModule javaTimeModule = new JavaTimeModule();
-            javaTimeModule.addDeserializer(LocalDateTime.class, dateTimeDeserializer);
-            javaTimeModule.addDeserializer(LocalDate.class, dateDeserializer);
-
+            javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(getDynamicFormatLocalDateTime()));
+            javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(getDynamicFormatLocalDateTime()));
             objectMapper = new ObjectMapper().registerModule(javaTimeModule);
         }
 
