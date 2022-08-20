@@ -29,6 +29,7 @@ class SearchTest {
     private TestRestTemplate testRestTemplate;
 
     @Test
+    @DisplayName("Test Equals, using only one field and one operation")
     void testEquals() {
         List<Address> response = testRestTemplate.exchange("/address?search=name==Rua 1", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -42,6 +43,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("Test greater than, using only one field and one operation")
     void testGreatThan() {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt>2022-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -54,6 +56,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("Test Less Than than equal, using only one field and one operation")
     void testLessThan() {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt<2025-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -66,6 +69,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("Test Greater Than Equal, using only one field and one operation")
     void testGreaterThanEqual() {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt>=2022-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -78,6 +82,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("Test Less Than Equal, using only one field and one operation")
     void testLessThanEqual() {
         List<Address> response = testRestTemplate.exchange("/address?search=createdAt<=2025-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -91,6 +96,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("Test Not Equal, using only one field and one operation")
     void testNotEquals() {
         List<Address> response = testRestTemplate.exchange("/address?search=name!=Rua 2", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -104,6 +110,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("Test Match, using only one field and one operation")
     void testMatch() {
 
         URI uri = UriComponentsBuilder
@@ -123,6 +130,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("Test Match Start, using only one field and one operation")
     void testMatchStart() {
         URI uri = UriComponentsBuilder
                 .fromUriString("/address")
@@ -141,7 +149,7 @@ class SearchTest {
     }
 
     @Test
-    @DisplayName("test match end")
+    @DisplayName("Test Match End, using only one field and one operation")
     void testMatchEnd() {
         URI uri = UriComponentsBuilder
                 .fromUriString("/address")
@@ -160,7 +168,7 @@ class SearchTest {
     }
 
     @Test
-    @DisplayName("test equal using composition")
+    @DisplayName("Test Equals, using only one field and one operation but using Composition")
     void testEqualsAccessingComposition() {
         List<Address> response = testRestTemplate.exchange("/address?search=state.name==SP", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -174,7 +182,7 @@ class SearchTest {
     }
 
     @Test
-    @DisplayName("test is not equal using composition")
+    @DisplayName("Test Not Equals, using only one field and one operation but using Composition")
     void testNotEqualsAccessingComposition() {
         List<Address> response = testRestTemplate.exchange("/address?search=state.name!=MA", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -188,7 +196,7 @@ class SearchTest {
     }
 
     @Test
-    @DisplayName("test equal using composition and multiple fields")
+    @DisplayName("Test using only multiples fields and one multiples operations and Composition 1")
     void testEqualsAccessingCompositionAndMultipleFields() {
         List<Address> response = testRestTemplate.exchange("/address?search=state.name==SP;state.country.name!=EUA", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
@@ -202,7 +210,7 @@ class SearchTest {
     }
 
     @Test
-    @DisplayName("test with multiple operations and multiple fields)")
+    @DisplayName("Test using only multiples fields and one multiples operations and Composition 2")
     void testMultipleOperationsAndMultipleFields() {
         List<Address> response = testRestTemplate.exchange("/address?search=state.name==SP;state.country.name!=EUA;name==Rua 1;createdAt<=2025-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
