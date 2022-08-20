@@ -140,6 +140,7 @@ class SearchTest {
     }
 
     @Test
+    @DisplayName("test match end")
     void testMatchEnd() {
         URI uri = UriComponentsBuilder
                 .fromUriString("/address")
@@ -189,6 +190,20 @@ class SearchTest {
     @DisplayName("test equal using composition and multiple fields")
     void testEqualsAccessingCompositionAndMultipleFields() {
         List<Address> response = testRestTemplate.exchange("/address?search=state.name==SP;state.country.name!=EUA", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Address>>() {
+                }).getBody();
+
+        Assertions.assertNotNull(response);
+
+        log.info("equals test response: {}", response.get(0).toString());
+
+        Assertions.assertEquals(response.get(0).getName(), "Rua 1");
+    }
+
+    @Test
+    @DisplayName("test with multiple operations and multiple fields)")
+    void testMultipleOperationsAndMultipleFields() {
+        List<Address> response = testRestTemplate.exchange("/address?search=state.name==SP;state.country.name!=EUA;name==Rua 1;createdAt<=2025-08-01", HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Address>>() {
                 }).getBody();
 
