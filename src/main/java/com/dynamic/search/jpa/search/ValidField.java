@@ -35,9 +35,9 @@ final class ValidField {
      */
     public static Object validAndReturnValue(List<String> list, Class<?> clazz, String value) {
 
-        Class<?> field = existsFieldRoot(list, clazz);
+        Class<?> classField = existsFieldRoot(list, clazz);
 
-        return convertType(field, value);
+        return convertType(classField, value);
     }
 
     /**
