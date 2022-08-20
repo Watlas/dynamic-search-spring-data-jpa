@@ -2,6 +2,7 @@ import com.dynamic.search.jpa.DynamicSearchJpaApplication;
 import com.dynamic.search.jpa.example.entity.Address;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -152,6 +153,48 @@ class SearchTest {
         Assertions.assertNotNull(response);
 
         log.info("match test response: {}", response.get(0).toString());
+
+        Assertions.assertEquals(response.get(0).getName(), "Rua 1");
+    }
+
+    @Test
+    @DisplayName("test equal using composition")
+    void testEqualsAccessingComposition() {
+        List<Address> response = testRestTemplate.exchange("/address?search=state.name==SP", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Address>>() {
+                }).getBody();
+
+        Assertions.assertNotNull(response);
+
+        log.info("equals test response: {}", response.get(0).toString());
+
+        Assertions.assertEquals(response.get(0).getName(), "Rua 1");
+    }
+
+    @Test
+    @DisplayName("test is not equal using composition")
+    void testNotEqualsAccessingComposition() {
+        List<Address> response = testRestTemplate.exchange("/address?search=state.name!=MA", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Address>>() {
+                }).getBody();
+
+        Assertions.assertNotNull(response);
+
+        log.info("equals test response: {}", response.get(0).toString());
+
+        Assertions.assertEquals(response.get(0).getName(), "Rua 1");
+    }
+
+    @Test
+    @DisplayName("test equal using composition and multiple fields")
+    void testEqualsAccessingCompositionAndMultipleFields() {
+        List<Address> response = testRestTemplate.exchange("/address?search=state.name==SP;state.country.name!=EUA", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Address>>() {
+                }).getBody();
+
+        Assertions.assertNotNull(response);
+
+        log.info("equals test response: {}", response.get(0).toString());
 
         Assertions.assertEquals(response.get(0).getName(), "Rua 1");
     }

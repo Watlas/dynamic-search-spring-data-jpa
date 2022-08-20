@@ -59,7 +59,7 @@ final class ValidField {
                     findFirst().
                     orElseThrow(() -> new NoSuchFieldError("Invalid field path, field: " + e));
 
-            fieldsValue.set(stream(field.getDeclaringClass().getDeclaredFields()).collect(Collectors.toList()));
+            fieldsValue.set(stream(field.getType().getDeclaredFields()).collect(Collectors.toList()));
 
             fieldReturn = field;
         }
