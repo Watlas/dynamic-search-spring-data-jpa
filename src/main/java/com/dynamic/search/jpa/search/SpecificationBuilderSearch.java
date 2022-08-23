@@ -75,11 +75,11 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
         for (SearchCriteria criteria : list) {
 
-            final Comparable<?>[] convertedValues = getConvertedValue(criteria.getValue());
+            final Comparable<?> convertedValues = getConvertedValue(criteria.getValue());
 
             FilterRoot pathKey = getPathAndLastKey(criteria.getFieldName(), root);
 
-            Predicate apply = criteria.getOperationType().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues[0]);
+            Predicate apply = criteria.getOperationType().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues);
 
             predicates.add(apply);
 
@@ -91,10 +91,10 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
     /**
      * @param value serialized value of the real object
-     * @return {@code Comparable<?>[]}
+     * @return {@code Comparable<?>}
      */
-    private Comparable<?>[] getConvertedValue(Object value) {
-        return new Comparable[]{(Comparable<?>) value};
+    private Comparable<?> getConvertedValue(Object value) {
+        return new Comparable[]{(Comparable<?>) value}[0];
     }
 
 
