@@ -36,24 +36,23 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
     public SpecificationBuilderSearch(Class<J> clazz, String search) {
         this.list = Arrays.stream(search.split(";")).map((String search1) -> new SearchCriteria(search1, clazz)).collect(Collectors.toList());
     }
-
     /**
      * The class of the entity to be searched, used on requisition HTTP POST
      *
      * @param clazz  The type of the entity to be searched
      * @param search The search criteria, example:
-     *               [
-     *               {
-     *               fieldName: "name",
-     *               operationType: "==",
-     *               value: "EUA"
-     *               },
-     *               {
-     *               fieldName: "state.name",
-     *               operationType: "==",
-     *               value: "SP"
-     *               }
-     *               ]
+     * [
+     *  {
+     *     fieldName: "name",
+     *     operationType: "==",
+     *     value: "EUA"
+     *  },
+     *  {
+     *     fieldName: "state.name",
+     *     operationType: "==",
+     *     value: "SP"
+     *  }
+     *]
      */
     public SpecificationBuilderSearch(Class<J> clazz, JsonNode search) {
         search.forEach(jsonNode -> list.add(new SearchCriteria(jsonNode.get("fieldName").asText(), jsonNode.get("value").asText(), jsonNode.get("operationType").asText(), clazz)));
@@ -75,11 +74,11 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
         for (SearchCriteria criteria : list) {
 
-            final Comparable<?> convertedValues = getConvertedValue(criteria.getValue());
+            final Comparable<?> convertedValue = getConvertedValue(criteria.getValue());
 
             FilterRoot pathKey = getPathAndLastKey(criteria.getFieldName(), root);
 
-            Predicate apply = criteria.getOperationType().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues);
+            Predicate apply = criteria.getOperationType().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValue);
 
             predicates.add(apply);
 

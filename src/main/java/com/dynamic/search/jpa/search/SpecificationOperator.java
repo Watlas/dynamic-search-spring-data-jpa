@@ -7,6 +7,7 @@ import javax.persistence.criteria.Predicate;
 /**
  * A functional interface represents Query Operators that will be used to build a Specification.
  */
+@SuppressWarnings("ALL")
 @FunctionalInterface
 interface SpecificationOperator {
 
