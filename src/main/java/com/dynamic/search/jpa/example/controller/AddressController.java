@@ -3,12 +3,9 @@ package com.dynamic.search.jpa.example.controller;
 import com.dynamic.search.jpa.example.entity.Address;
 import com.dynamic.search.jpa.example.repository.AddressRepository;
 import com.dynamic.search.jpa.search.SpecificationBuilderSearch;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,9 +21,8 @@ public class AddressController {
         return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search));
     }
 
-    @GetMapping(produces = "application/json", path = "/page")
-    public Page<Address> listAddressByFilterAndPageable(String search, Pageable pageable) {
-        return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search), pageable);
+    @PostMapping(produces = "application/json")
+    public List<Address> listAddressByFilterPost(@RequestBody JsonNode jsonNode) {
+        return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, jsonNode));
     }
-
 }

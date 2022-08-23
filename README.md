@@ -4,8 +4,9 @@ Example application of a dynamic search using URL parameters and a Predicate bui
 
 ## General Info
 
-This project is about making dynamic queries according to some parameters passed by the URL, a great differential of
-this project is the possibility of accessing compositions and searches by dates.
+This project consists of making dynamic queries according to HTTP GET or POST requests, each one with a different type
+of implementation, a great differential of
+this project is the possibility to access compositions and searches by dates.
 
 ## Technologies
 
@@ -33,30 +34,39 @@ so just build the project and test.
 As an example we will use an endpoint that is in the directory com.dynamic.search.jpa.example.controller:
 
 ```
-     @GetMapping(produces = "application/json")
-    public List<Address> listAddressByFilter(@RequestParam String search) {
+@RequestMapping("/address")
+@RestController
+@RequiredArgsConstructor
+public class AddressController {
+
+    private final AddressRepository addressRepository;
+
+    @GetMapping(produces = "application/json")
+    public List<Address> listAddressByFilter(String search) {
         return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search));
     }
-    
-    @GetMapping(produces = "application/json")
-    public Page<Address> listAddressByFilterAndPageable(@RequestParam String search, Pageable pageable) {
-        return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search), pageable);
+
+    @PostMapping(produces = "application/json")
+    public List<Address> listAddressByFilterPost(@RequestBody JsonNode jsonNode) {
+        return addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, jsonNode));
     }
     
+}
+
 ```
+
+### Examples using GET
 
 Now just access some client to make HTTP requests and make a query:
 
 ```
-     http://localhost:8080/address?search=id==1
-     http://localhost:8080/address/page?search=state.id==3&page=0&size=10
+  curl --location --request GET  'http://localhost:8080/address?search=id==1'
 ```
 
 You can pass more than one attribute using the semicolon (;) as the attribute separator:
 
 ```
-    http://localhost:8080/address/page?search=state.id==3&page=0&size=10
-    http://localhost:8080/address?search=state.id==1;&page=0&size=10
+   curl --location --request GET  'http://localhost:8080/address/page?search=state.id==3;name==Rua 1'
 ```
 
 You can use dates to query, enter dates, etc.
@@ -72,8 +82,7 @@ formats accepted for now:
 * yyyy/MM/dd
 
 ```
-    http://localhost:8080/address?search=createdAt>=2022-06-06;createdAt<=2022-10-06
-    http://localhost:8080/address/page?search=createdAt>=2022-06-06;createdAt<=2022-10-06&page=0&size=10
+    curl --location --request GET 'http://localhost:8080/address?search=createdAt>=2022-06-06;createdAt<=2030-10-06'
 ```
 
 But you can go there yourself in the DateCreate Class and add its format.
@@ -96,8 +105,68 @@ These are the operators supported by dynamic search.
 | `MATCH START`        |    ~&    |
 | `MATCH END`          |    &~    |
 
+### Examples using POST
 
-You can see examples of all operations supported in the integration tests found in the SearchTest class.
+Simple request with a single field
+
+```
+curl --location --request POST 'http://localhost:8080/address' \
+--header 'Content-Type: application/json' \
+--data-raw '[
+  { 
+    "fieldName": "name",
+    "operationType": "==",
+    "value": "Rua 1"
+  }
+]'
+
+```
+
+Simple request with a single field and accessing composition
+
+```
+curl --location --request POST 'http://localhost:8080/address' \
+--header 'Content-Type: application/json' \
+--data-raw '[
+  {
+    "fieldName": "state.name",
+    "operationType": "==",
+    "value": "SP"
+  }
+]'
+```
+
+Complex request with multiple fields and multiple compositions
+
+```
+curl --location --request POST 'http://localhost:8080/address' \
+--header 'Content-Type: application/json' \
+--data-raw '[
+  {
+    "fieldName": "state.name",
+    "operationType": "==",
+    "value": "SP"
+  },
+  {
+    "fieldName": "state.country.name",
+    "operationType": "!=",
+    "value": "EUA"
+  },
+  {
+    "fieldName": "createdAt",
+    "operationType": "<=",
+    "value": "2030-08-01"
+  },
+  {
+    "fieldName": "name",
+    "operationType": "==",
+    "value": "Rua 1"
+  }
+]
+'
+```
+
+You can see examples of all operations supported in the integration tests found in the SearchGetTest class.
 
 ```
 mvn clean test
@@ -108,13 +177,5 @@ mvn clean test
 just add the directory com.dynamic.search.jpa.search in your project and call the class SpecificationBuilderSearch
 passing the entity and the search, and pass the result of the builder to the repository.
 
-```
-addressRepository.findAll(new SpecificationBuilderSearch<>(Address.class, search));
-
-Address - Entity
-search - Search parameter
-SpecificationBuilderSearch - Class responsible for creating the Specification to send the repository layer
-
-```
 ## Author:
 *  [Watlas](https://www.linkedin.com/in/watlas-rick-371392181/)

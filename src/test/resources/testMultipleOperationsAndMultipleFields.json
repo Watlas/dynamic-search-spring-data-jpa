@@ -1,0 +1,22 @@
+[
+  {
+    "fieldName": "state.name",
+    "operationType": "==",
+    "value": "SP"
+  },
+  {
+    "fieldName": "state.country.name",
+    "operationType": "!=",
+    "value": "EUA"
+  },
+  {
+    "fieldName": "createdAt",
+    "operationType": "<=",
+    "value": "2030-08-01"
+  },
+  {
+    "fieldName": "name",
+    "operationType": "==",
+    "value": "Rua 1"
+  }
+]

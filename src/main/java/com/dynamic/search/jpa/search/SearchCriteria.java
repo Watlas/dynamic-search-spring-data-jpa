@@ -13,12 +13,12 @@ import static com.dynamic.search.jpa.search.ValidField.validAndReturnValue;
  * the object that will be compared with the values in the database
  */
 @Getter
-final class SearchCriteria {
+public final class SearchCriteria {
 
     /**
      * attribute name
      */
-    private final String key;
+    private final String fieldName;
 
     /**
      * value to search
@@ -28,15 +28,31 @@ final class SearchCriteria {
     /**
      * operation type
      */
-    private final SearchOperation operation;
+    private final SearchOperation operationType;
 
-
+    /**
+     * Constructor using for HTTP methods of type GET
+     *
+     * @param search search criteria
+     * @param clazz  class of the entity to be searched
+     */
     public SearchCriteria(String search, Class<?> clazz) {
-        operation = SearchOperation.getByString(search);
-        List<String> collect = Arrays.stream(search.split(operation.getValue())).collect(Collectors.toList());
-        this.key = collect.get(0);
+        operationType = SearchOperation.getByString(search);
+        List<String> collect = Arrays.stream(search.split(operationType.getExpression())).collect(Collectors.toList());
+        this.fieldName = collect.get(0);
         this.value = validAndReturnValue(Arrays.stream(collect.get(0).split("\\.")).collect(Collectors.toList()), clazz, collect.get(1));
     }
 
-
+    /**
+     * Constructor using for HTTP methods of type POST
+     *
+     * @param fieldName attribute name
+     * @param value     value to search
+     * @param operation operation type
+     */
+    public SearchCriteria(String fieldName, String value, String operation, Class<?> clazz) {
+        this.fieldName = fieldName;
+        this.value = validAndReturnValue(Arrays.stream(fieldName.split("\\.")).collect(Collectors.toList()), clazz, value);
+        this.operationType = SearchOperation.getByString(operation);
+    }
 }

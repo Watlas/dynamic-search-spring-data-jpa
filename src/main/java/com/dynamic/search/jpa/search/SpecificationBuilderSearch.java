@@ -1,5 +1,6 @@
 package com.dynamic.search.jpa.search;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,7 +11,6 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.dynamic.search.jpa.search.FilterRoot.getPathAndLastKey;
@@ -25,17 +25,40 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
     /**
      * The list of search criteria
      */
-    private final Set<SearchCriteria> list;
+    private List<SearchCriteria> list = new ArrayList<>();
 
     /**
-     * The class of the entity to be searched
+     * The class of the entity to be searched, used on requisition HTTP GET
      *
      * @param clazz  The type of the entity to be searched
      * @param search The search criteria, example <p>name==John;age>=30;dateLastModified<=2020-01-01</p>
      */
     public SpecificationBuilderSearch(Class<J> clazz, String search) {
-        this.list = Arrays.stream(search.split(";")).map((String search1) -> new SearchCriteria(search1, clazz)).collect(Collectors.toSet());
+        this.list = Arrays.stream(search.split(";")).map((String search1) -> new SearchCriteria(search1, clazz)).collect(Collectors.toList());
     }
+
+    /**
+     * The class of the entity to be searched, used on requisition HTTP POST
+     *
+     * @param clazz  The type of the entity to be searched
+     * @param search The search criteria, example:
+     *               [
+     *               {
+     *               fieldName: "name",
+     *               operationType: "==",
+     *               value: "EUA"
+     *               },
+     *               {
+     *               fieldName: "state.name",
+     *               operationType: "==",
+     *               value: "SP"
+     *               }
+     *               ]
+     */
+    public SpecificationBuilderSearch(Class<J> clazz, JsonNode search) {
+        search.forEach(jsonNode -> list.add(new SearchCriteria(jsonNode.get("fieldName").asText(), jsonNode.get("value").asText(), jsonNode.get("operationType").asText(), clazz)));
+    }
+
 
     /**
      * Creates the Specification object to be sent to the repository layer
@@ -54,9 +77,9 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
             final Comparable<?>[] convertedValues = getConvertedValue(criteria.getValue());
 
-            FilterRoot pathKey = getPathAndLastKey(criteria.getKey(), root);
+            FilterRoot pathKey = getPathAndLastKey(criteria.getFieldName(), root);
 
-            Predicate apply = criteria.getOperation().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues[0]);
+            Predicate apply = criteria.getOperationType().getOperator().apply(pathKey.getRoot(), criteriaBuilder, pathKey.getLastKey(), convertedValues[0]);
 
             predicates.add(apply);
 
@@ -67,13 +90,11 @@ public final class SpecificationBuilderSearch<J> implements Specification<J> {
 
 
     /**
-     * Deserializes then given {@code value} array back to real object using {@code javaType}
-     *
      * @param value serialized value of the real object
      * @return {@code Comparable<?>[]}
      */
     private Comparable<?>[] getConvertedValue(Object value) {
-        return new Comparable[]{(Comparable) value};
+        return new Comparable[]{(Comparable<?>) value};
     }
 
 

@@ -14,6 +14,12 @@ public class DynamicSearchJpaApplication {
 
     private final AddressRepository addressRepository;
 
+    @Bean
+    public void initDB() {
+        Address address = new Address("Rua 1", new State("SP", new Country("Brazil")), new People("John"));
+        addressRepository.save(address);
+    }
+
     public DynamicSearchJpaApplication(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
     }
@@ -22,11 +28,5 @@ public class DynamicSearchJpaApplication {
         SpringApplication.run(DynamicSearchJpaApplication.class, args);
     }
 
-
-    @Bean
-    public void initDB() {
-        Address address = new Address("Rua 1", new State("SP", new Country("Brazil")), new People("John"));
-        addressRepository.save(address);
-    }
 
 }

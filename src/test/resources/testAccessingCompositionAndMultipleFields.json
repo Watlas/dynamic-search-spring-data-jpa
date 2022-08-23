@@ -1,0 +1,12 @@
+[
+  {
+    "fieldName": "state.name",
+    "operationType": "==",
+    "value": "SP"
+  },
+  {
+    "fieldName": "state.country.name",
+    "operationType": "!=",
+    "value": "EUA"
+  }
+]

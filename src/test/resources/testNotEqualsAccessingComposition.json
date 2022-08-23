@@ -1,0 +1,7 @@
+[
+  {
+    "fieldName": "state.name",
+    "operationType": "!=",
+    "value": "MA"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "fieldName": "createdAt",
+    "operationType": ">=",
+    "value": "2021-08-01"
+  }
+]
