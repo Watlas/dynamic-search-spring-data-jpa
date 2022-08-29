@@ -11,6 +11,7 @@ import javax.persistence.criteria.Predicate;
 @FunctionalInterface
 interface SpecificationOperator {
 
+
     /**
      * Represents equality function
      *
@@ -77,7 +78,8 @@ interface SpecificationOperator {
      * @return {@link SpecificationOperator}
      */
     static SpecificationOperator like() {
-        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(cb.lower(path.get(attribute)), String.format("%%%s%%", value).toLowerCase());
+        return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) ->
+                cb.like(cb.lower(path.get(attribute)), String.format("%%%s%%", value).toLowerCase());
     }
 
     /**
@@ -87,8 +89,7 @@ interface SpecificationOperator {
      */
     static SpecificationOperator likeStart() {
         return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(
-                cb.lower(path.get(attribute)),
-                value.toString().toLowerCase() + "%");
+                cb.lower(path.get(attribute)), value.toString().toLowerCase() + "%");
 
     }
 
@@ -99,8 +100,7 @@ interface SpecificationOperator {
      */
     static SpecificationOperator likeEnd() {
         return (Path<?> path, CriteriaBuilder cb, String attribute, Comparable value) -> cb.like(
-                cb.lower(path.get(attribute)),
-                "%" + value.toString().toLowerCase());
+                cb.lower(path.get(attribute)), "%" + value.toString().toLowerCase());
     }
 
     /**

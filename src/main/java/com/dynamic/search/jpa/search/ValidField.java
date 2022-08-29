@@ -33,7 +33,6 @@ final class ValidField {
      * @return value to search
      */
     public static Object validAndReturnValue(List<String> list, Class<?> clazz, String value) {
-
         Class<?> classField = existsFieldRoot(list, clazz);
 
         return convertType(classField, value);
@@ -139,11 +138,11 @@ final class ValidField {
         }
 
         /**
-         * @param fromValue  json object to be deserialized to the real object type
-         * @param toJavaType the real type to be converted
+         * @param value json object to be deserialized to the real object type
+         * @param type  the real type to be converted
          */
-        public Object convert(Object fromValue, Class<?> toJavaType) {
-            return objectMapper.convertValue(fromValue, toJavaType);
+        public Object convert(Object value, Class<?> type) {
+            return objectMapper.convertValue(value, type);
         }
     }
 }
