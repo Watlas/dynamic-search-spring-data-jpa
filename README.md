@@ -178,4 +178,9 @@ just add the directory com.dynamic.search.jpa.search in your project and call th
 passing the entity and the search, and pass the result of the builder to the repository.
 
 ## Author:
-*  [Watlas](https://www.linkedin.com/in/watlas-rick-371392181/)
+
+* [Watlas](https://www.linkedin.com/in/watlas-rick-371392181/)
+
+## More detailed explanation of the solution
+
+* [Medium](https://medium.com/@watlas/9df4ebd80d22)
